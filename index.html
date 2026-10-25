@@ -1,126 +1,620 @@
-<!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SaaS RevPilot — Revenue Intelligence</title>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SaaS RevPilot | Revenue Intelligence</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-:root{--ink:#18324b;--muted:#6e8295;--line:#e4edf3;--bg:#f4f8fb;--teal:#12a89d;--blue:#4b83e6;--orange:#f2a65a;--purple:#9275db;--white:#fff}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}header{padding:24px clamp(18px,4vw,54px);background:linear-gradient(120deg,#e9fbf7,#edf4ff 62%,#fff5e9);border-bottom:1px solid var(--line)}.top{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--teal),var(--blue));display:grid;place-items:center;color:white;font-weight:900;font-size:19px;box-shadow:0 8px 20px #4b83e633}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.14em;color:#128f88;text-transform:uppercase}.brand h1{margin:3px 0;font-size:25px}.brand p{margin:0;color:var(--muted);font-size:13px}.tag{padding:9px 13px;background:#fff;border:1px solid #d8e8e9;border-radius:99px;font-size:12px;font-weight:700;color:#357c7c}.wrap{max-width:1500px;margin:auto;padding:22px clamp(14px,3vw,42px) 50px}.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}.filters select,.filters input,.btn{border:1px solid #dbe5ec;border-radius:11px;background:white;padding:10px 12px;color:var(--ink);font:inherit;font-size:13px}.btn{cursor:pointer;font-weight:700}.btn.primary{background:var(--ink);color:white;border-color:var(--ink)}.btn.soft{background:#e5f7f4;border-color:#c9eee7;color:#087f77}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{background:white;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 5px 20px #29496606;min-width:0}.kpi-label{color:var(--muted);font-size:12px;font-weight:700}.kpi{font-size:26px;font-weight:800;letter-spacing:-.04em;margin:10px 0 5px}.kpi-sub{font-size:11px;color:var(--muted)}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--teal)}.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:26px 0 12px}.section-title h2{margin:0;font-size:17px}.section-title p{margin:4px 0 0;color:var(--muted);font-size:12px}.charts{display:grid;grid-template-columns:1.5fr 1fr;gap:14px}.chartbox{height:290px;position:relative}.chartbox.small{height:250px}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px}table{border-collapse:collapse;width:100%;background:#fff;font-size:12px;min-width:700px}th,td{text-align:left;padding:11px 12px;border-bottom:1px solid #edf2f6;white-space:nowrap}th{background:#f6fafc;color:#657b8d;font-size:10px;letter-spacing:.06em;text-transform:uppercase;position:sticky;top:0}td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}.pill{border-radius:30px;background:#e9f8f5;color:#087f77;padding:4px 8px;font-size:10px;font-weight:800}.muted{color:var(--muted)}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.upload{border:1px dashed #9bcac7;background:#f8fffd;border-radius:14px;padding:18px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}.upload strong{display:block;margin-bottom:4px}.upload p{font-size:12px;color:var(--muted);margin:0}.notice{font-size:11px;color:#7d8e9b;margin-top:10px;line-height:1.5}.footer{font-size:11px;color:#8093a3;margin-top:22px;line-height:1.6}.bar{height:8px;background:#edf3f7;border-radius:9px;overflow:hidden;margin-top:10px}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--blue));border-radius:9px}.empty{padding:20px;text-align:center;color:var(--muted)}@media(max-width:950px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.charts,.two{grid-template-columns:1fr}}@media(max-width:520px){.grid{grid-template-columns:1fr}.kpi{font-size:24px}.brand h1{font-size:21px}}
-</style></head><body>
-<header><div class="top"><div class="brand"><div class="logo">R</div><div><div class="eyebrow">Revenue intelligence</div><h1>SaaS RevPilot</h1><p>Forecast & reconnaissance des revenus SaaS</p></div></div><div class="tag">● Données du gabarit original conservées</div></div></header>
-<main class="wrap">
-<nav class="filters" aria-label="Navigation principale">
-<button class="btn primary navbtn" data-tab="overview">Overview</button>
-<button class="btn navbtn" data-tab="bridge">Revenue Bridge</button>
-<button class="btn navbtn" data-tab="close">Monthly Revenue Close</button>
-<button class="btn navbtn" data-tab="insights">AI Insights</button>
-</nav>
-<section id="tab-overview">
-<div class="filters">
-<label class="muted">Exercice&nbsp; <select id="year"><option>2026</option><option>2027</option><option>2028</option></select></label>
-<label class="muted">Business Unit&nbsp; <select id="bu"><option value="ALL">Toutes les BU</option><option>CSP</option><option>CSTLO</option><option>SYGED</option></select></label>
-<label class="muted">Mois&nbsp; <select id="month"><option value="ALL">Année complète</option><option value="01">Janvier</option><option value="02">Février</option><option value="03">Mars</option><option value="04">Avril</option><option value="05">Mai</option><option value="06">Juin</option><option value="07">Juillet</option><option value="08">Août</option><option value="09">Septembre</option><option value="10">Octobre</option><option value="11">Novembre</option><option value="12">Décembre</option></select></label>
-<input id="search" placeholder="Rechercher un client ou une facture…"><button class="btn soft" id="reset">Réinitialiser</button>
-</div>
-<div class="grid" id="kpis"></div>
-<div class="section-title"><div><h2>Trajectoire des revenus</h2><p>Revenus SaaS reconnus issus des lignes et calculs mensuels du gabarit original</p></div><span class="pill">USD · HT</span></div>
-<div class="charts"><section class="card"><div class="kpi-label">Évolution mensuelle</div><div class="chartbox"><canvas id="trend"></canvas></div></section><section class="card"><div class="kpi-label">Contribution par BU</div><div class="chartbox"><canvas id="mix"></canvas></div></section></div>
-<div class="section-title"><div><h2>Comparatif 2026 vs 2027</h2><p>Comparaison annuelle issue des données du fichier, sans inventer de nouvelles lignes</p></div></div>
-<section class="card"><div class="chartbox"><canvas id="compare"></canvas></div><div class="notice">Le gabarit source contient aussi une projection 2028. Les données affichées sont celles calculées dans le fichier d’origine ; le dashboard ne remplace pas les hypothèses métier par des valeurs fictives nouvelles.</div></section>
-<div class="section-title"><div><h2>Prévision par client et facture</h2><p>Filtrez, recherchez et exportez les lignes visibles.</p></div><button class="btn primary" id="export">Exporter les lignes filtrées en CSV</button></div>
-<div class="table-wrap"><table><thead><tr><th>BU</th><th>Client</th><th>Produit / plan</th><th>Facture</th><th>Début service</th><th>Fin service</th><th class="num">Montant HT</th><th class="num">Revenu reconnu période</th><th>Statut paiement</th><th>Statut contrat</th></tr></thead><tbody id="rows"></tbody></table></div>
-<div class="section-title"><div><h2>Gestion des factures</h2><p>Ajouter des justificatifs à la session locale et les télécharger depuis le navigateur.</p></div></div>
-<section class="card"><div class="upload"><div><strong>Joindre une facture (PDF, image ou Excel)</strong><p>Prototype local : les pièces jointes ne sont pas envoyées sur Microsoft 365 ou SharePoint.</p></div><input id="files" type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.xlsx,.xls,.csv"></div><div id="filelist" class="notice">Aucune pièce jointe ajoutée dans cette session.</div><div class="notice">Pour un usage partagé, la sauvegarde permanente, l’OCR des factures et la synchronisation Microsoft 365 nécessitent une connexion backend/API sécurisée.</div></section>
-</section>
-<section id="tab-bridge" hidden>
-<div class="section-title"><div><h2>Revenue Bridge</h2><p>Décomposition de la variation annuelle par client et produit, calculée à partir des revenus du gabarit.</p></div><label class="muted">Comparaison <select id="bridgeYears"><option value="2026-2027">2026 → 2027</option><option value="2027-2028">2027 → 2028</option></select></label></div>
-<div class="grid" id="bridgeKpis"></div>
-<div class="charts"><section class="card"><div class="kpi-label">Contribution à la variation</div><div class="chartbox"><canvas id="bridgeChart"></canvas></div></section><section class="card"><div class="kpi-label">Principaux mouvements</div><div id="bridgeTop" class="notice"></div></section></div>
-<div class="section-title"><div><h2>Détail des mouvements</h2><p>Les catégories sont inférées par comparaison des montants annuels par client/produit ; à valider métier avant clôture.</p></div></div>
-<div class="table-wrap"><table><thead><tr><th>Catégorie</th><th>BU</th><th>Client</th><th>Produit</th><th class="num">Année précédente</th><th class="num">Année comparée</th><th class="num">Variation</th></tr></thead><tbody id="bridgeRows"></tbody></table></div>
-<div class="notice">Limite : les catégories « New/Lost Client / Module » sont des signaux de variation client-produit, pas une qualification contractuelle définitive. Pour distinguer rigoureusement les nouveaux clients des nouveaux modules, il faut une clé client/module fiable et un historique des contrats.</div>
-</section>
-<section id="tab-close" hidden>
-<div class="section-title"><div><h2>Monthly Revenue Close</h2><p>Checklist de clôture mensuelle — état local à cette session.</p></div><label class="muted">Mois de clôture <input id="closeMonth" type="month" value="2026-01"></label></div>
-<div class="two"><section class="card"><h3>Contrôles de clôture</h3><div id="closeChecks"></div></section><section class="card"><h3>Synthèse de clôture</h3><div id="closeSummary"></div><button class="btn primary" id="closeExport">Exporter la checklist</button></section></div>
-<div class="notice">La checklist est une aide de contrôle et ne valide pas automatiquement les écritures comptables. La sauvegarde partagée et l'approbation nécessitent un backend.</div>
-</section>
-<section id="tab-insights" hidden>
-<div class="section-title"><div><h2>AI Insights — Analyse financière assistée</h2><p>Constats calculés à partir des données source. Pas de modèle IA externe connecté à ce stade.</p></div><button class="btn soft" id="refreshInsights">Actualiser l'analyse</button></div>
-<div class="grid" id="insightKpis"></div>
-<section class="card" style="margin-top:14px"><h3>Commentaire financier proposé</h3><div id="narrative" style="line-height:1.75"></div><div class="notice">Le texte est généré par des règles déterministes sur les montants disponibles. Il devra être enrichi par un modèle IA connecté pour comprendre les causes métier dans les commentaires et les pièces jointes.</div></section>
-</section>
-<div class="footer">Source : SAAS GED - GabaritVF(1).xlsx · Feuilles exploitées : SAAS CSP, SAAS CSTLO et SAAS SYGED. Les onglets « Synthèse » et « Contrôles » du classeur restent inchangés dans le fichier Excel d’origine.</div>
-</main>
-<script>
-let DATA=null, charts={};
-const fmt=n=>new Intl.NumberFormat('fr-FR',{style:'currency',currency:'USD',maximumFractionDigits:0}).format(n||0);
-const monthNames=['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
-async function init(){try{const res=await fetch('./saas_revpilot_data.json');DATA=await res.json();render();}catch(e){document.getElementById('kpis').innerHTML='<div class="card">Impossible de charger les données. Vérifiez que saas_revpilot_data.json est dans le même dossier que index.html et que l’application est ouverte via GitHub Pages ou un serveur local.</div>';}}
-function filtered(){let y=document.getElementById('year').value,bu=document.getElementById('bu').value,m=document.getElementById('month').value,q=document.getElementById('search').value.toLowerCase().trim();return DATA.records.filter(r=>(bu==='ALL'||r.bu===bu)&&(!q||[r.client,r.invoice,r.product,r.bu].join(' ').toLowerCase().includes(q)));}
-function amount(r,y,m){let vals=Object.entries(r.recognized).filter(([k])=>k.startsWith(y+'-')&&(m==='ALL'||k.endsWith('-'+m)));return vals.reduce((a,[k,v])=>a+(v||0),0);}
-function sumFor(list,y,m){return list.reduce((a,r)=>a+amount(r,y,m),0);}
-function chart(id,type,data,opts={}){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),{type,data,options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8}}},scales:type==='doughnut'?{}:{y:{beginAtZero:true,ticks:{callback:v=>new Intl.NumberFormat('fr-FR',{notation:'compact',maximumFractionDigits:1}).format(v)}}},...opts}});}
-function render(){const y=document.getElementById('year').value,m=document.getElementById('month').value,all=filtered(),period=all.filter(r=>amount(r,y,m)!==0||m==='ALL'),total=sumFor(all,y,m),annual=sumFor(all,y,'ALL'),prev=y==='2026'?0:sumFor(all,String(+y-1),'ALL'),delta=prev?((annual-prev)/prev*100):null,clients=new Set(all.filter(r=>amount(r,y,m)!==0).map(r=>r.client)).size, invoices=new Set(all.filter(r=>r.invoice&&amount(r,y,m)!==0).map(r=>r.invoice)).size;
-document.getElementById('kpis').innerHTML=[
-['Revenu reconnu période',fmt(total),'Période sélectionnée'],
-['Forecast annuel',fmt(annual),'Total de l’exercice sélectionné'],
-['Clients actifs sur la période',clients,'Clients avec revenu reconnu'],
-['Factures concernées',invoices,'Références de facture distinctes']
-].map((k,i)=>`<div class="card"><div class="kpi-label"><span class="dot" style="background:${['#12a89d','#4b83e6','#f2a65a','#9275db'][i]}"></span>${k[0]}</div><div class="kpi">${k[1]}</div><div class="kpi-sub">${k[2]}</div></div>`).join('');
-let labels=monthNames,monthly=labels.map((_,i)=>sumFor(all,y,String(i+1).padStart(2,'0')));if(m!=='ALL'){monthly=monthly.map((v,i)=>i+1===+m?v:0);}
-chart('trend','line',{labels,datasets:[{label:'Revenu reconnu',data:monthly,borderColor:'#12a89d',backgroundColor:'#12a89d22',fill:true,tension:.35,pointRadius:3}]},{plugins:{legend:{display:false}}});
-let buNames=['CSP','CSTLO','SYGED'],buVals=buNames.map(b=>sumFor(all.filter(r=>r.bu===b),y,m));chart('mix','doughnut',{labels:buNames,datasets:[{data:buVals,backgroundColor:['#12a89d','#4b83e6','#f2a65a'],borderWidth:0}]});
-let ys=['2026','2027','2028'];chart('compare','bar',{labels:buNames,datasets:ys.map((yr,i)=>({label:yr,data:buNames.map(b=>sumFor(all.filter(r=>r.bu===b),yr,'ALL')),backgroundColor:['#12a89d','#4b83e6','#f2a65a'][i],borderRadius:6}))},{scales:{y:{beginAtZero:true,ticks:{callback:v=>new Intl.NumberFormat('fr-FR',{notation:'compact'}).format(v)}}}});
-document.getElementById('rows').innerHTML=period.slice(0,500).map(r=>`<tr><td><span class="pill">${esc(r.bu)}</span></td><td>${esc(r.client)}</td><td>${esc(r.product||'—')}</td><td>${esc(r.invoice||'—')}</td><td>${r.service_start||'—'}</td><td>${r.service_end||'—'}</td><td class="num">${r.amount_ht==null?'—':fmt(r.amount_ht)}</td><td class="num">${fmt(amount(r,y,m))}</td><td>${esc(r.payment_status||'—')}</td><td>${esc(r.contract_status||'—')}</td></tr>`).join('')||'<tr><td colspan="10" class="empty">Aucune ligne pour ces filtres.</td>';
-document.getElementById('export').onclick=()=>exportCSV(period,y,m);
+:root {
+  --navy:#172B4D;
+  --teal:#167D78;
+  --blue:#5277C7;
+  --bg:#F5F7FB;
+  --white:#FFFFFF;
+  --muted:#718096;
+  --line:#E5EBF2;
 }
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function exportCSV(rows,y,m){let cols=['bu','client','product','invoice','service_start','service_end','amount_ht','payment_status','contract_status'];let header=[...cols,`recognized_${y}_${m}`];let csv=[header.join(';'),...rows.map(r=>[...cols.map(c=>String(r[c]??'')),amount(r,y,m)].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';'))].join('\r\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}));a.download=`SaaS_RevPilot_${y}_${m}.csv`;a.click();URL.revokeObjectURL(a.href);}
-document.querySelectorAll('#year,#bu,#month').forEach(el=>el.addEventListener('change',render));document.getElementById('search').addEventListener('input',render);document.getElementById('reset').onclick=()=>{document.getElementById('year').value='2026';document.getElementById('bu').value='ALL';document.getElementById('month').value='ALL';document.getElementById('search').value='';render();};
-document.getElementById('files').addEventListener('change',e=>{const files=[...e.target.files];document.getElementById('filelist').innerHTML=files.length?files.map(f=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #edf2f6"><span>${esc(f.name)} <span class="muted">(${(f.size/1024).toFixed(0)} Ko)</span></span><button class="btn" data-file="${esc(f.name)}">Télécharger</button></div>`).join(''):'Aucune pièce jointe ajoutée dans cette session.';document.querySelectorAll('[data-file]').forEach((b,i)=>b.onclick=()=>{let f=files[i],a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click();URL.revokeObjectURL(a.href);});});
-function showTab(name){document.querySelectorAll('[id^="tab-"]').forEach(s=>s.hidden=true);document.getElementById('tab-'+name).hidden=false;document.querySelectorAll('.navbtn').forEach(b=>{b.classList.toggle('primary',b.dataset.tab===name);});}
-document.querySelectorAll('.navbtn').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--navy);
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+}
+header{
+  padding:28px 5%;
+  background:linear-gradient(120deg,#EFF8F6,#F1F4FF,#FFFAF3);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{
+  width:48px;height:48px;border-radius:15px;
+  display:grid;place-items:center;color:white;font-weight:900;
+  font-size:22px;background:linear-gradient(135deg,var(--teal),var(--blue));
+}
+.eyebrow{
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--teal);font-weight:800;
+}
+h1{font-size:27px;margin:5px 0}
+header p{margin:0;color:var(--muted);font-size:13px}
+main{max-width:1500px;margin:auto;padding:25px 4% 50px}
+nav,.filters{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:20px}
+button,select,input,textarea{
+  font:inherit;border-radius:10px;
+}
+button{
+  border:1px solid var(--line);padding:10px 14px;
+  background:white;color:var(--navy);cursor:pointer;font-weight:650;
+}
+button:hover{filter:brightness(.97)}
+button.active,.primary{background:var(--navy);color:white;border-color:var(--navy)}
+.soft{background:#EAF6F4;color:var(--teal);border-color:#D6ECE8}
+select,input,textarea{
+  border:1px solid #DCE5EE;background:white;padding:10px;
+  color:var(--navy);max-width:100%;
+}
+label{font-size:12px;color:var(--muted)}
+.card{
+  background:white;border:1px solid var(--line);border-radius:17px;
+  padding:19px;box-shadow:0 7px 22px #20385508;min-width:0;
+}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.two{display:grid;grid-template-columns:1.4fr 1fr;gap:15px}
+.klabel{font-size:12px;color:var(--muted);font-weight:700}
+.kpi{font-size:26px;font-weight:800;letter-spacing:-1px;margin:12px 0 5px}
+.sub{font-size:11px;color:var(--muted)}
+h2{font-size:18px;margin:0 0 5px}
+h3{font-size:15px;margin:0 0 15px}
+.section{margin:25px 0 12px}
+.section p{font-size:12px;color:var(--muted);margin:5px 0}
+.chart{height:280px;position:relative}
+table{border-collapse:collapse;width:100%;font-size:12px;background:white}
+th,td{padding:12px;text-align:left;border-bottom:1px solid #EDF2F6}
+th{background:#F7FAFC;color:#718096;font-size:10px;text-transform:uppercase}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:13px}
+.num{text-align:right;white-space:nowrap}
+.pill{background:#EAF6F4;color:var(--teal);border-radius:20px;padding:5px 8px;font-size:10px;font-weight:800}
+.formgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.field{display:flex;flex-direction:column;gap:6px;font-weight:650}
+.field input,.field select,.field textarea{width:100%;font-weight:400}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.notice{font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}
+.hidden{display:none!important}
+.demo{border:1px solid var(--line);border-radius:12px;padding:14px;margin:10px 0}
+.demo p{font-size:12px;color:var(--muted);line-height:1.5}
+#message{margin-top:12px;font-size:12px;color:var(--teal)}
+@media(max-width:900px){
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .two{grid-template-columns:1fr}
+ .formgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:550px){
+ .grid,.formgrid{grid-template-columns:1fr}
+ h1{font-size:22px}.kpi{font-size:23px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo">R</div>
+    <div>
+      <div class="eyebrow">Revenue Intelligence Platform</div>
+      <h1>SaaS RevPilot</h1>
+      <p>Revenue forecast · Recognition · Performance analysis</p>
+    </div>
+  </div>
+</header>
+
+<main>
+<nav>
+  <button class="active" data-tab="overview">Overview</button>
+  <button data-tab="bridge">Revenue Bridge</button>
+  <button data-tab="close">Monthly Revenue Close</button>
+  <button data-tab="insights">AI Insights</button>
+  <button data-tab="manual">Ajouter une facture</button>
+</nav>
+
+<section id="overview">
+  <div class="filters">
+    <label>Exercice<br>
+      <select id="year">
+        <option>2026</option><option>2027</option><option>2028</option>
+      </select>
+    </label>
+    <label>Business Unit<br>
+      <select id="bu">
+        <option value="ALL">Toutes les BU</option>
+        <option value="CSP">CSP</option>
+        <option value="CSTLO">CSTLO</option>
+        <option value="SYGED">SYGED</option>
+      </select>
+    </label>
+    <label>Mois<br>
+      <select id="month">
+        <option value="ALL">Année complète</option>
+        <option value="01">Janvier</option><option value="02">Février</option>
+        <option value="03">Mars</option><option value="04">Avril</option>
+        <option value="05">Mai</option><option value="06">Juin</option>
+        <option value="07">Juillet</option><option value="08">Août</option>
+        <option value="09">Septembre</option><option value="10">Octobre</option>
+        <option value="11">Novembre</option><option value="12">Décembre</option>
+      </select>
+    </label>
+    <label>Recherche<br>
+      <input id="search" placeholder="Client ou facture">
+    </label>
+    <button id="reset" class="soft">Réinitialiser</button>
+  </div>
+
+  <div class="grid" id="kpis"></div>
+
+  <div class="section">
+    <h2>Trajectoire des revenus</h2>
+    <p>Revenus reconnus issus des montants mensuels du gabarit original.</p>
+  </div>
+  <div class="two">
+    <div class="card">
+      <div class="klabel">Évolution mensuelle</div>
+      <div class="chart"><canvas id="trend"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="klabel">Répartition par BU</div>
+      <div class="chart"><canvas id="mix"></canvas></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Comparaison annuelle</h2>
+    <p>Comparaison des revenus reconnus sur les trois exercices disponibles.</p>
+  </div>
+  <div class="card"><div class="chart"><canvas id="compare"></canvas></div></div>
+
+  <div class="section">
+    <h2>Détail des factures et revenus</h2>
+    <p>Les lignes ci-dessous proviennent des données du classeur source.</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr>
+        <th>BU</th><th>Client</th><th>Produit</th><th>Facture</th>
+        <th>Début service</th><th>Fin service</th>
+        <th class="num">Montant HT</th><th class="num">Revenu reconnu</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="actions"><button id="export" class="primary">Exporter les lignes CSV</button></div>
+  <p class="notice">Devise : USD. Les chiffres affichés dépendent des données mensuelles présentes dans le fichier JSON.</p>
+</section>
+
+<section id="bridge" class="hidden">
+  <div class="section">
+    <h2>Revenue Bridge</h2>
+    <p>Comprendre les mouvements de revenus entre deux exercices.</p>
+  </div>
+  <div class="filters">
+    <label>Comparaison<br>
+      <select id="bridgeYears">
+        <option value="2026-2027">2026 → 2027</option>
+        <option value="2027-2028">2027 → 2028</option>
+      </select>
+    </label>
+  </div>
+  <div class="grid" id="bridgeKpis"></div>
+  <div class="card" style="margin-top:15px">
+    <div class="chart"><canvas id="bridgeChart"></canvas></div>
+  </div>
+  <div class="section"><h2>Principaux mouvements</h2></div>
+  <div class="tablewrap">
+    <table><thead><tr>
+      <th>Catégorie</th><th>BU</th><th>Client</th><th>Produit</th>
+      <th class="num">Année précédente</th><th class="num">Année comparée</th>
+      <th class="num">Variation</th>
+    </tr></thead><tbody id="bridgeRows"></tbody></table>
+  </div>
+  <p class="notice">Les catégories sont des classifications indicatives par client/produit. Une validation métier est nécessaire pour distinguer précisément les nouveaux clients des nouveaux modules.</p>
+</section>
+
+<section id="close" class="hidden">
+  <div class="section">
+    <h2>Monthly Revenue Close</h2>
+    <p>Checklist de préparation de la clôture mensuelle.</p>
+  </div>
+  <div class="filters">
+    <label>Mois de clôture<br><input type="month" id="closeMonth" value="2026-01"></label>
+  </div>
+  <div class="two">
+    <div class="card"><h3>Contrôles à effectuer</h3><div id="closeChecks"></div></div>
+    <div class="card"><h3>Synthèse</h3><div id="closeSummary"></div>
+      <button class="primary" id="closeExport">Exporter la checklist</button>
+    </div>
+  </div>
+  <p class="notice">Cette checklist assiste le contrôle, mais ne remplace pas la validation comptable.</p>
+</section>
+
+<section id="insights" class="hidden">
+  <div class="section">
+    <h2>AI Insights</h2>
+    <p>Commentaires analytiques calculés à partir des données disponibles.</p>
+  </div>
+  <div class="grid" id="insightKpis"></div>
+  <div class="card" style="margin-top:15px">
+    <h3>Commentaire financier proposé</h3>
+    <div id="narrative" style="line-height:1.8"></div>
+  </div>
+  <p class="notice">Cette version utilise des règles de calcul. Aucun modèle IA externe n'est connecté pour le moment.</p>
+</section>
+
+<section id="manual" class="hidden">
+  <div class="section">
+    <h2>Ajouter une facture manuellement</h2>
+    <p>Saisir les informations de facturation et de période de service.</p>
+  </div>
+  <div class="two">
+    <div class="card">
+      <h3>Informations de la facture</h3>
+      <form id="invoiceForm">
+        <div class="formgrid">
+          <label class="field">BU
+            <select id="fBu"><option>CSP</option><option>CSTLO</option><option>SYGED</option></select>
+          </label>
+          <label class="field">Client
+            <input id="fClient" required placeholder="Nom du client">
+          </label>
+          <label class="field">N° facture
+            <input id="fNumber" required placeholder="INV-2026-001">
+          </label>
+          <label class="field">Produit / module
+            <input id="fProduct" required placeholder="Licence SaaS">
+          </label>
+          <label class="field">Date de facture
+            <input id="fDate" type="date" required>
+          </label>
+          <label class="field">Montant HT USD
+            <input id="fAmount" type="number" min="0.01" step="0.01" required>
+          </label>
+          <label class="field">Début de service
+            <input id="fStart" type="date" required>
+          </label>
+          <label class="field">Fin de service
+            <input id="fEnd" type="date" required>
+          </label>
+          <label class="field">Fréquence
+            <select id="fFrequency">
+              <option>Mensuelle</option><option>Trimestrielle</option>
+              <option>Semestrielle</option><option>Annuelle</option>
+              <option>Prorata / ponctuelle</option>
+            </select>
+          </label>
+          <label class="field">Paiement
+            <select id="fPayment">
+              <option>À payer</option><option>Payée</option>
+              <option>Partiellement payée</option><option>En retard</option>
+            </select>
+          </label>
+          <label class="field">Statut du contrat
+            <select id="fStatus">
+              <option>Actif</option><option>Nouveau</option>
+              <option>Renouvellement</option><option>Résilié</option>
+            </select>
+          </label>
+          <label class="field">Remarque
+            <input id="fNotes" placeholder="Optionnel">
+          </label>
+        </div>
+        <div class="actions">
+          <button class="primary" type="submit">Enregistrer la facture</button>
+          <button type="reset">Vider le formulaire</button>
+        </div>
+        <div id="message"></div>
+      </form>
+    </div>
+    <div class="card">
+      <h3>Factures fictives pour la démo</h3>
+      <div class="demo">
+        <b>01 · Abonnement mensuel</b>
+        <p>Atlas Digital · SYGED · 1 200 USD HT · janvier 2026.</p>
+        <a href="./demo_facture_mensuelle.pdf" target="_blank">Ouvrir la facture PDF</a>
+      </div>
+      <div class="demo">
+        <b>02 · Abonnement annuel</b>
+        <p>Novacore Consulting · CSTLO · 12 000 USD HT · année 2026.</p>
+        <a href="./demo_facture_annuelle.pdf" target="_blank">Ouvrir la facture PDF</a>
+      </div>
+      <div class="demo">
+        <b>03 · Module avec prorata</b>
+        <p>Orion Health Group · CSP · 2 400 USD HT · mars à décembre 2026.</p>
+        <a href="./demo_facture_module_prorata.pdf" target="_blank">Ouvrir la facture PDF</a>
+      </div>
+      <p class="notice">Ces documents sont fictifs. La sélection des PDF nécessite que les trois fichiers soient publiés à la racine du dépôt.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Factures saisies manuellement</h2>
+    <button id="exportManual" class="soft">Exporter les factures saisies</button>
+  </div>
+  <div class="tablewrap">
+    <table><thead><tr>
+      <th>BU</th><th>Client</th><th>Facture</th><th>Produit</th>
+      <th>Date</th><th class="num">Montant HT</th>
+      <th>Période de service</th><th>Paiement</th>
+    </tr></thead><tbody id="manualRows"></tbody></table>
+  </div>
+  <p class="notice">Les saisies manuelles sont conservées dans le navigateur utilisé. Elles ne sont pas encore synchronisées avec SharePoint et ne recalculent pas automatiquement le dashboard.</p>
+</section>
+
+<footer class="notice" style="margin-top:35px">
+SaaS RevPilot · Prototype de démonstration · Données du gabarit original.
+</footer>
+</main>
+
+<script>
+const money=n=>new Intl.NumberFormat('fr-FR',{
+  style:'currency',currency:'USD',maximumFractionDigits:0
+}).format(Number(n)||0);
+const months=['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'];
+let DATA={records:[],revenue_bridges:{}};
+let charts={};
+
+function esc(v){
+  return String(v??'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+function yearAmount(r,y,m='ALL'){
+  return Object.entries(r.recognized||{}).reduce((s,[k,v])=>{
+    return s+(k.startsWith(y+'-')&&(m==='ALL'||k.endsWith('-'+m))?(Number(v)||0):0);
+  },0);
+}
+function selectedRecords(){
+  const bu=document.getElementById('bu').value;
+  const q=document.getElementById('search').value.toLowerCase().trim();
+  return DATA.records.filter(r=>
+    (bu==='ALL'||r.bu===bu)&&
+    (!q||[r.client,r.invoice,r.product,r.bu].join(' ').toLowerCase().includes(q))
+  );
+}
+function sumRows(rows,y,m='ALL'){
+  return rows.reduce((s,r)=>s+yearAmount(r,y,m),0);
+}
+function drawChart(id,type,data,options={}){
+  if(charts[id])charts[id].destroy();
+  const canvas=document.getElementById(id);
+  if(!canvas)return;
+  charts[id]=new Chart(canvas,{
+    type,data,
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom'}},
+      scales:type==='doughnut'?{}:{y:{beginAtZero:true}},
+      ...options
+    }
+  });
+}
+function renderOverview(){
+  const y=document.getElementById('year').value;
+  const m=document.getElementById('month').value;
+  const rows=selectedRecords();
+  const total=sumRows(rows,y,m);
+  const annual=sumRows(rows,y);
+  const activeClients=new Set(rows.filter(r=>yearAmount(r,y,m)!==0).map(r=>r.client)).size;
+  const invoices=new Set(rows.filter(r=>r.invoice&&yearAmount(r,y,m)!==0).map(r=>r.invoice)).size;
+  document.getElementById('kpis').innerHTML=[
+    ['Revenu reconnu période',money(total),'Montants du gabarit'],
+    ['Total annuel',money(annual),'Exercice sélectionné'],
+    ['Clients avec revenu',activeClients,'Sur la période filtrée'],
+    ['Factures concernées',invoices,'Références distinctes']
+  ].map(x=>`<div class="card"><div class="klabel">${x[0]}</div><div class="kpi">${x[1]}</div><div class="sub">${x[2]}</div></div>`).join('');
+
+  const monthly=months.map((_,i)=>sumRows(rows,y,String(i+1).padStart(2,'0')));
+  drawChart('trend','line',{labels:months,datasets:[{
+    label:'Revenu reconnu',data:monthly,borderColor:'#167D78',
+    backgroundColor:'#167D7820',fill:true,tension:.35
+  }]});
+  const bus=['CSP','CSTLO','SYGED'];
+  drawChart('mix','doughnut',{labels:bus,datasets:[{
+    data:bus.map(b=>sumRows(rows.filter(r=>r.bu===b),y,m)),
+    backgroundColor:['#167D78','#5277C7','#E7A15B'],borderWidth:0
+  }]});
+  drawChart('compare','bar',{labels:bus,datasets:['2026','2027','2028'].map((yr,i)=>({
+    label:yr,data:bus.map(b=>sumRows(rows.filter(r=>r.bu===b),yr)),
+    backgroundColor:['#167D78','#5277C7','#E7A15B'][i]
+  }))});
+
+  const visible=rows.filter(r=>yearAmount(r,y,m)!==0||m==='ALL');
+  document.getElementById('rows').innerHTML=visible.slice(0,500).map(r=>`
+    <tr><td><span class="pill">${esc(r.bu)}</span></td>
+    <td>${esc(r.client)}</td><td>${esc(r.product||'—')}</td>
+    <td>${esc(r.invoice||'—')}</td><td>${esc(r.service_start||'—')}</td>
+    <td>${esc(r.service_end||'—')}</td>
+    <td class="num">${r.amount_ht==null?'—':money(r.amount_ht)}</td>
+    <td class="num">${money(yearAmount(r,y,m))}</td></tr>
+  `).join('')||'<tr><td colspan="8">Aucune donnée pour ces filtres.</td></tr>';
+
+  document.getElementById('export').onclick=()=>{
+    exportCSV(visible,['bu','client','product','invoice','service_start','service_end','amount_ht','payment_status','contract_status'],`RevPilot_${y}.csv`,r=>yearAmount(r,y,m));
+  };
+}
 function renderBridge(){
- const key=document.getElementById('bridgeYears').value, bridge=DATA.revenue_bridges[key]||{}, cats=['New Client / Module','Lost Client / Module','Expansion / Increase','Contraction / Decrease','Stable'];
- const names={'New Client / Module':'Nouveaux revenus client/produit','Lost Client / Module':'Revenus perdus client/produit','Expansion / Increase':'Expansion / hausse','Contraction / Decrease':'Contraction / baisse','Stable':'Stable'};
- const rows=cats.map(c=>({cat:c,amount:bridge[c]?.amount||0,items:bridge[c]?.items||[]}));
- document.getElementById('bridgeKpis').innerHTML=rows.filter(x=>x.cat!=='Stable').map(x=>`<div class="card"><div class="kpi-label">${names[x.cat]}</div><div class="kpi" style="font-size:21px">${fmt(x.amount)}</div><div class="kpi-sub">${x.items.length} mouvements identifiés</div></div>`).join('');
- chart('bridgeChart','bar',{labels:rows.filter(x=>x.cat!=='Stable').map(x=>names[x.cat]),datasets:[{label:'Variation USD',data:rows.filter(x=>x.cat!=='Stable').map(x=>x.amount),backgroundColor:['#12a89d','#e57373','#4b83e6','#f2a65a'],borderRadius:6}]},{indexAxis:'y',scales:{x:{ticks:{callback:v=>new Intl.NumberFormat('fr-FR',{notation:'compact'}).format(v)}}}});
- const items=rows.flatMap(x=>x.items.map(it=>({...it,cat:x.cat}))).sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta)).slice(0,8);
- document.getElementById('bridgeTop').innerHTML=items.map(i=>`<p><b>${esc(i.client)}</b> · ${esc(i.bu)} · ${esc(i.product)}<br><span style="color:${i.delta>=0?'#078b7e':'#d66b65'}">${fmt(i.delta)}</span> <span class="muted">(${esc(i.cat)})</span></p>`).join('')||'Aucun mouvement identifié.';
- const all=rows.flatMap(x=>x.items.map(it=>({...it,cat:x.cat}))).sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta));
- document.getElementById('bridgeRows').innerHTML=all.slice(0,300).map(i=>`<tr><td>${esc(names[i.cat])}</td><td>${esc(i.bu)}</td><td>${esc(i.client)}</td><td>${esc(i.product)}</td><td class="num">${fmt(i.previous)}</td><td class="num">${fmt(i.current)}</td><td class="num">${fmt(i.delta)}</td></tr>`).join('')||'<tr><td colspan="7">Aucun mouvement.</td></tr>';
+  const key=document.getElementById('bridgeYears').value;
+  const bridge=DATA.revenue_bridges?.[key]||{};
+  const names={
+    'New Client / Module':'Nouveaux revenus client/produit',
+    'Lost Client / Module':'Revenus perdus client/produit',
+    'Expansion / Increase':'Expansion / hausse',
+    'Contraction / Decrease':'Contraction / baisse'
+  };
+  const cats=Object.keys(names);
+  document.getElementById('bridgeKpis').innerHTML=cats.map(c=>`
+    <div class="card"><div class="klabel">${names[c]}</div>
+    <div class="kpi">${money(bridge[c]?.amount||0)}</div>
+    <div class="sub">${(bridge[c]?.items||[]).length} mouvements</div></div>
+  `).join('');
+  drawChart('bridgeChart','bar',{labels:cats.map(c=>names[c]),datasets:[{
+    label:'Variation USD',data:cats.map(c=>bridge[c]?.amount||0),
+    backgroundColor:['#167D78','#D86E6E','#5277C7','#E7A15B']
+  }]},{indexAxis:'y'});
+  const all=cats.flatMap(c=>(bridge[c]?.items||[]).map(x=>({...x,cat:c})))
+    .sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta));
+  document.getElementById('bridgeRows').innerHTML=all.slice(0,300).map(x=>`
+    <tr><td>${names[x.cat]}</td><td>${esc(x.bu)}</td><td>${esc(x.client)}</td>
+    <td>${esc(x.product)}</td><td class="num">${money(x.previous)}</td>
+    <td class="num">${money(x.current)}</td><td class="num">${money(x.delta)}</td></tr>
+  `).join('')||'<tr><td colspan="7">Aucune variation disponible.</td></tr>';
 }
 function renderClose(){
- const m=document.getElementById('closeMonth').value||'2026-01', [y,mo]=m.split('-'), monthKey=`${y}-${mo}`, list=DATA.records.filter(r=>(document.getElementById('bu').value==='ALL'||r.bu===document.getElementById('bu').value)&&((r.recognized[monthKey]||0)!==0||r.invoice_date?.startsWith(monthKey)));
- const checks=[
-  ['source','Factures / lignes du mois identifiées',list.length>0,`${list.length} ligne(s) avec revenu ou facture pour le mois`],
-  ['dates','Dates de service renseignées',list.every(r=>r.service_start&&r.service_end), 'Contrôler les périodes de service manquantes'],
-  ['amounts','Montants HT renseignés',list.every(r=>r.amount_ht!==null), 'Contrôler les montants absents'],
-  ['invoice','Numéros de facture présents',list.every(r=>r.invoice), 'Contrôler les références manquantes'],
-  ['payment','Statuts de paiement renseignés',list.every(r=>r.payment_status), 'Vérifier les statuts de paiement'],
-  ['contract','Statuts de contrat renseignés',list.every(r=>r.contract_status), 'Vérifier les statuts de contrat']
- ];
- document.getElementById('closeChecks').innerHTML=checks.map(c=>`<label style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #edf2f6"><input type="checkbox" data-check="${c[0]}"><span><b>${c[1]}</b><br><span class="muted">${c[3]}</span></span></label>`).join('');
- document.getElementById('closeSummary').innerHTML=`<p><span class="kpi-label">Mois</span><div class="kpi">${esc(monthKey)}</div></p><p><span class="kpi-label">Revenu reconnu source</span><div class="kpi">${fmt(list.reduce((s,r)=>s+(r.recognized[monthKey]||0),0))}</div></p><p><span class="kpi-label">Lignes à examiner</span><div class="kpi">${list.length}</div></p>`;
- document.getElementById('closeExport').onclick=()=>{let checksNow=[...document.querySelectorAll('[data-check]')].map(c=>({controle:c.parentElement.innerText.replace(/\n/g,' - '),valide:c.checked?'Oui':'À vérifier'}));let csv='Contrôle;État\r\n'+checksNow.map(x=>`"${x.controle.replace(/"/g,'""')}";"${x.valide}"`).join('\r\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}));a.download=`Revenue_Close_${monthKey}.csv`;a.click();URL.revokeObjectURL(a.href);};
+  const period=document.getElementById('closeMonth').value||'2026-01';
+  const [y,m]=period.split('-');
+  const list=DATA.records.filter(r=>(r.recognized?.[period]||0)!==0||
+    (r.invoice_date||'').startsWith(period));
+  const checks=[
+    ['Factures/lignes identifiées',list.length>0],
+    ['Dates de service renseignées',list.every(r=>r.service_start&&r.service_end)],
+    ['Montants HT renseignés',list.every(r=>r.amount_ht!==null)],
+    ['Numéros de facture renseignés',list.every(r=>r.invoice)],
+    ['Statuts de paiement renseignés',list.every(r=>r.payment_status)],
+    ['Statuts de contrat renseignés',list.every(r=>r.contract_status)]
+  ];
+  document.getElementById('closeChecks').innerHTML=checks.map((c,i)=>`
+    <label style="display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #EDF2F6">
+    <input type="checkbox" data-check="${i}">
+    <span>${c[0]}<br><small>${c[1]?'Contrôle préliminaire favorable':'Vérification nécessaire'}</small></span>
+    </label>`).join('');
+  document.getElementById('closeSummary').innerHTML=`
+    <p>Mois sélectionné</p><div class="kpi">${period}</div>
+    <p>Revenu reconnu source</p><div class="kpi">${money(list.reduce((s,r)=>s+(r.recognized?.[period]||0),0))}</div>
+    <p>${list.length} ligne(s) identifiée(s)</p>`;
+  document.getElementById('closeExport').onclick=()=>{
+    const checksNow=[...document.querySelectorAll('[data-check]')].map(c=>({
+      controle:c.parentElement.innerText.replace(/\n/g,' - '),valide:c.checked?'Validé':'À vérifier'
+    }));
+    exportCSV(checksNow,['controle','valide'],`Revenue_Close_${period}.csv`);
+  };
 }
 function renderInsights(){
- const y=document.getElementById('year').value,all=filtered(),monthly=monthNames.map((_,i)=>sumFor(all,y,String(i+1).padStart(2,'0'))),annual=monthly.reduce((a,b)=>a+b,0),peak=Math.max(...monthly),peakM=monthNames[monthly.indexOf(peak)],zero=all.filter(r=>!r.invoice||!r.service_start||!r.service_end||r.amount_ht===null).length;
- const buS=['CSP','CSTLO','SYGED'].map(b=>({b,v:sumFor(all.filter(r=>r.bu===b),y,'ALL')})).sort((a,b)=>b.v-a.v), first=monthly.slice(0,6).reduce((a,b)=>a+b,0),last=monthly.slice(6).reduce((a,b)=>a+b,0),half=first?((last-first)/first*100):null;
- document.getElementById('insightKpis').innerHTML=[
- ['Revenu annuel',fmt(annual),'Montants reconnus du gabarit'],
- ['Mois le plus élevé',peakM,fmt(peak)],
- ['Lignes avec données à vérifier',zero,'Référence, dates ou montant manquant'],
- ['Évolution S2 vs S1',half===null?'N/D':(half>=0?'+':'')+half.toFixed(1)+'%','Comparaison des sommes mensuelles S1/S2']
- ].map(k=>`<div class="card"><div class="kpi-label">${k[0]}</div><div class="kpi">${k[1]}</div><div class="kpi-sub">${k[2]}</div></div>`).join('');
- let direction=last>first?'une hausse':last<first?'une baisse':'une stabilité';
- document.getElementById('narrative').innerHTML=`<p>Sur l’exercice <b>${y}</b>, le revenu reconnu issu des lignes du gabarit s’élève à <b>${fmt(annual)}</b>. Le mois le plus élevé est <b>${peakM}</b> avec <b>${fmt(peak)}</b>.</p><p>La seconde moitié de l’année présente ${direction} par rapport à la première moitié${half===null?'':` (${half>=0?'+':''}${half.toFixed(1)}%)`} sur la base des montants mensuels cumulés.</p><p>La BU la plus contributrice est <b>${buS[0]?.b||'N/D'}</b> avec <b>${fmt(buS[0]?.v||0)}</b>. Vérifie les <b>${zero}</b> ligne(s) signalées pour données manquantes avant d’utiliser les chiffres en reporting.</p><p><b>Action recommandée :</b> rapprocher les montants mensuels avec la source de facturation, examiner les anomalies de données, puis valider la ventilation par période de service.</p>`;
+  const y=document.getElementById('year').value;
+  const rows=selectedRecords();
+  const vals=months.map((_,i)=>sumRows(rows,y,String(i+1).padStart(2,'0')));
+  const annual=vals.reduce((a,b)=>a+b,0);
+  const peak=Math.max(...vals);
+  const peakMonth=months[vals.indexOf(peak)];
+  const missing=rows.filter(r=>!r.invoice||!r.service_start||!r.service_end||r.amount_ht==null).length;
+  const s1=vals.slice(0,6).reduce((a,b)=>a+b,0);
+  const s2=vals.slice(6).reduce((a,b)=>a+b,0);
+  const change=s1?(s2-s1)/s1*100:null;
+  document.getElementById('insightKpis').innerHTML=[
+    ['Revenu annuel',money(annual)],
+    ['Mois le plus élevé',peakMonth],
+    ['Lignes à vérifier',missing],
+    ['Variation S2 / S1',change===null?'N/D':change.toFixed(1)+'%']
+  ].map(x=>`<div class="card"><div class="klabel">${x[0]}</div><div class="kpi">${x[1]}</div></div>`).join('');
+  document.getElementById('narrative').innerHTML=`
+    <p>Sur l'exercice <b>${y}</b>, le revenu reconnu issu du gabarit s'élève à
+    <b>${money(annual)}</b>.</p>
+    <p>Le mois le plus élevé est <b>${peakMonth}</b>, avec
+    <b>${money(peak)}</b>.</p>
+    <p>La variation entre le premier et le second semestre est
+    <b>${change===null?'non calculable':change.toFixed(1)+'%'}</b>.</p>
+    <p><b>Action recommandée :</b> examiner les lignes à vérifier (${missing}),
+    rapprocher les factures avec les périodes de service et valider les écarts
+    avant la clôture.</p>`;
 }
-document.getElementById('bridgeYears').addEventListener('change',renderBridge);
-document.getElementById('closeMonth').addEventListener('change',renderClose);
-document.getElementById('refreshInsights').addEventListener('click',renderInsights);
-const oldRender=render;
-render=function(){oldRender();renderBridge();renderClose();renderInsights();};
+function getManual(){
+  try{return JSON.parse(localStorage.getItem('revpilot_manual')||'[]')}
+  catch(e){return []}
+}
+function saveManual(list){
+  try{localStorage.setItem('revpilot_manual',JSON.stringify(list))}
+  catch(e){alert('Stockage local indisponible. Exportez vos données pour les conserver.')}
+}
+function renderManual(){
+  const list=getManual();
+  document.getElementById('manualRows').innerHTML=list.map(r=>`
+    <tr><td>${esc(r.bu)}</td><td>${esc(r.client)}</td><td>${esc(r.invoice)}</td>
+    <td>${esc(r.product)}</td><td>${esc(r.date)}</td><td class="num">${money(r.amount)}</td>
+    <td>${esc(r.start)} → ${esc(r.end)}</td><td>${esc(r.payment)}</td></tr>
+  `).join('')||'<tr><td colspan="8">Aucune facture saisie.</td></tr>';
+}
+document.getElementById('invoiceForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const list=getManual();
+  const invoice=document.getElementById('fNumber').value.trim();
+  if(list.some(r=>r.invoice.toLowerCase()===invoice.toLowerCase())){
+    document.getElementById('message').textContent='Ce numéro de facture existe déjà.';
+    return;
+  }
+  const start=document.getElementById('fStart').value;
+  const end=document.getElementById('fEnd').value;
+  if(end<start){
+    document.getElementById('message').textContent='La fin de service doit être après le début.';
+    return;
+  }
+  list.unshift({
+    bu:document.getElementById('fBu').value,
+    client:document.getElementById('fClient').value.trim(),
+    invoice,product:document.getElementById('fProduct').value.trim(),
+    date:document.getElementById('fDate').value,
+    amount:Number(document.getElementById('fAmount').value),
+    start,end,
+    frequency:document.getElementById('fFrequency').value,
+    payment:document.getElementById('fPayment').value,
+    status:document.getElementById('fStatus').value,
+    notes:document.getElementById('fNotes').value
+  });
+  saveManual(list);renderManual();
+  document.getElementById('message').textContent='Facture enregistrée dans ce navigateur.';
+  e.target.reset();
+});
+function exportCSV(rows,cols,name,amountFn){
+  const csv=[cols.join(';'),...rows.map(r=>[
+    ...cols.map(c=>r[c]??''),...(amountFn?[amountFn(r)]:[])
+  ].map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(';'))].join('\r\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download=name;a.click();URL.revokeObjectURL(a.href);
+}
+document.getElementById('exportManual').onclick=()=>{
+  const list=getManual();
+  exportCSV(list,['bu','client','invoice','product','date','amount','start','end','frequency','payment','status','notes'],'Factures_Manuelles.csv');
+};
+function renderAll(){
+  renderOverview();renderBridge();renderClose();renderInsights();renderManual();
+}
+document.querySelectorAll('nav button').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+  document.getElementById(btn.dataset.tab).classList.remove('hidden');
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b===btn));
+  if(btn.dataset.tab==='manual')renderManual();
+}));
+['year','bu','month','bridgeYears','closeMonth'].forEach(id=>{
+  document.getElementById(id).addEventListener('change',renderAll);
+});
+document.getElementById('search').addEventListener('input',renderAll);
+document.getElementById('reset').onclick=()=>{
+  document.getElementById('year').value='2026';
+  document.getElementById('bu').value='ALL';
+  document.getElementById('month').value='ALL';
+  document.getElementById('search').value='';
+  renderAll();
+};
+async function init(){
+  try{
+    const response=await fetch('./saas_revpilot_data.json');
+    if(!response.ok)throw new Error('Fichier JSON absent');
+    DATA=await response.json();
+    renderAll();
+  }catch(error){
+    document.getElementById('kpis').innerHTML=`
+      <div class="card" style="grid-column:1/-1">
+      <h3>Fichier de données introuvable</h3>
+      <p>Ajoutez <b>saas_revpilot_data.json</b> à la racine du dépôt GitHub,
+      au même niveau que index.html, puis rechargez le site.</p></div>`;
+  }
+}
 init();
-</script></body></html>
+</script>
+</body>
+</html>
